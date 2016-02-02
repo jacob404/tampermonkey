@@ -1,0 +1,12 @@
+// ==UserScript==
+// @name Mafia Settings
+// @namespace Jacob
+// @match https://epicmafia.com/*
+// @version 1
+// @grant none
+// ==/UserScript==
+
+document.cookie='acronym=true';
+document.cookie='mutemusic=true';
+document.cookie='timestamp=true';
+document.cookie='voting=true';
