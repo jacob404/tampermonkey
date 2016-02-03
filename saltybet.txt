@@ -6,16 +6,55 @@
 // @grant none
 // ==/UserScript==
 
-$('#interval1').attr('id', 'interval500').attr('name', 'static').text('500');
+// A script designed to improve user experience on Salty Bet.
+// I uploaded this script in a readable format, for easier customization and understanding.
+// In order to run it in tampermonkey, you must collapse the updateBet function onto 1 line.
+// I had to move the intervals listed below out of order to avoid issues with conflicting id's.
+// If you modify this script be wary of order of operations with id's!
+
+$('#interval1').attr('id', 'interval250').attr('name', 'static').text('250');
 $('#interval2').attr('id', 'interval1000').attr('name', 'static').text('1000');
-$('#interval3').attr('id', 'interval1500').attr('name', 'static').text('1500');
-$('#interval4').attr('id', 'interval1').text('1%');
-$('#interval5').attr('id', 'interval2').text('2%');
+$('#interval3').attr('id', 'interval5000').attr('name', 'static').text('5000');
+$('#interval4').attr('name', 'rounded').text('Rounded');
+$('#interval5').attr('id', 'interval1').text('1%');
 $('#interval6').attr('id', 'interval5').text('5%');
 $('#interval8').attr('id', 'interval20').text('20%');
 $('#interval9').attr('id', 'interval50').text('50%');
 $('#interval10').attr('id', 'interval100');
 $('#interval7').attr('id', 'interval10').text('10%');
 
-function updateBet(){interval = $(this).attr('id'); name = $(this).attr('name'); if(Number($(this).val()) === 0) if(name == 'static'){$('#wager').val(Number(interval.substr(8)));}else{$('#wager').val( Math.ceil((balance/100) * Number(interval.substr(8))));}else {$('#wager').val(Number($(this).val()));}};
+function updateBet() {
+    interval = $(this).attr('id').substr(8);
+    name = $(this).attr('name');
+    money = $('#balance').text().replace(",", "");
+    roundedMoney = (Math.round(money / 1000) * 1000);
+    roundedBet = (money - roundedMoney);
+    currentWager = Number($('#wager').val());
+    isFirstStatic = 1;
+
+    if (Number($(this).val()) === 0) {
+        if (name == 'static') {
+            if (isFirstStatic == 1) {
+                isFirstStatic = 0;
+                $('#wager').val(Number(interval));
+            }
+            else {
+                $('#wager').val(currentWager + Number(interval));
+            }
+        }
+        if (name == 'rounded') {
+            $('#wager').val(roundedBet);
+            isFirstStatic = 1;
+        }
+        else {
+            $('#wager').val(Math.ceil((balance / 100) * Number()));
+            isFirstStatic = 1;
+        }
+    }
+    else {
+        $('#wager').val(Number($(this).val()));
+        isFirstStatic = 1;
+    }
+};
+
 $('.button-purple').off('click').on('click', updateBet);
