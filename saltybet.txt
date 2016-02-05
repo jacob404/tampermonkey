@@ -7,10 +7,10 @@
 // ==/UserScript==
 
 // A script designed to improve user experience on Salty Bet.
-// I uploaded this script in a readable format, for easier customization and understanding.
-// In order to run it in tampermonkey, you must collapse the updateBet function onto 1 line.
 // I had to move the intervals listed below out of order to avoid issues with conflicting id's.
 // If you modify this script be wary of order of operations with id's!
+
+var isFirstStatic = 1;
 
 $('#interval1').attr('id', 'interval250').attr('name', 'static').text('250');
 $('#interval2').attr('id', 'interval1000').attr('name', 'static').text('1000');
@@ -24,36 +24,32 @@ $('#interval10').attr('id', 'interval100');
 $('#interval7').attr('id', 'interval10').text('10%');
 
 function updateBet() {
-    interval = $(this).attr('id').substr(8);
+    interval = $(this).attr('id');
     name = $(this).attr('name');
-    money = $('#balance').text().replace(",", "");
-    roundedMoney = (Math.round(money / 1000) * 1000);
-    roundedBet = (money - roundedMoney);
-    currentWager = Number($('#wager').val());
-    isFirstStatic = 1;
 
     if (Number($(this).val()) === 0) {
         if (name == 'static') {
             if (isFirstStatic == 1) {
+                $('#wager').val(Number(interval.substr(8)));
                 isFirstStatic = 0;
-                $('#wager').val(Number(interval));
             }
             else {
-                $('#wager').val(currentWager + Number(interval));
+                currentWager = Number($('#wager').val());
+                $('#wager').val(currentWager + Number(interval.substr(8)));
             }
+            
         }
-        if (name == 'rounded') {
-            $('#wager').val(roundedBet);
+        else if (name == 'rounded') {
+            $('#wager').val(balance - Math.floor(balance / 1000) * 1000);
             isFirstStatic = 1;
         }
         else {
-            $('#wager').val(Math.ceil((balance / 100) * Number()));
+            $('#wager').val(Math.ceil((balance / 100) * Number(interval.substr(8))));
             isFirstStatic = 1;
         }
     }
     else {
         $('#wager').val(Number($(this).val()));
-        isFirstStatic = 1;
     }
 };
 
