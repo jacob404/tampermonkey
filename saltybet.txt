@@ -70,7 +70,6 @@ function updateMatchesRemaining() {
         now = new Date(Date.now());
         tempHours = now.getHours();
         tempMinutes = now.getMinutes() + estimatedTimeToTourney;
-        oldstring = $("#footer-alert").text();
         if (tempMinutes > 60) {
             estimatedHours = tempHours + Math.floor(tempMinutes / 60);
             estimatedMinutes = tempMinutes % 60;
