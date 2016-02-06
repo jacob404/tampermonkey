@@ -12,6 +12,7 @@
 
 var isFirstStatic = 1;
 
+// Change betting buttons to custom values
 $('#interval1').attr('id', 'interval250').attr('name', 'static').text('250');
 $('#interval2').attr('id', 'interval1000').attr('name', 'static').text('1000');
 $('#interval3').attr('id', 'interval5000').attr('name', 'static').text('5000');
@@ -23,6 +24,7 @@ $('#interval9').attr('id', 'interval50').text('50%');
 $('#interval10').attr('id', 'interval100');
 $('#interval7').attr('id', 'interval10').text('10%');
 
+// Update betting function to support static and rounded values
 function updateBet() {
     interval = $(this).attr('id');
     name = $(this).attr('name');
@@ -53,4 +55,56 @@ function updateBet() {
     }
 };
 
+// Replace existing betting function with our own
 $('.button-purple').off('click').on('click', updateBet);
+
+// Create a loop to check if we need to append the estimated time
+var timer = setInterval(updateMatchesRemaining, 500)
+
+// Add estimated time remaining until tournament
+function updateMatchesRemaining() {
+    if ($('#footer-alert').text().search("bracket") < 0 && $('#footer-alert').text().search("exhibition") < 0 && $('#footer-alert').text().search("Estimated") < 0) {
+        matchesRemaining = $('#footer-alert').text().search(" ");
+        matchesToNextTourney = Number($('#footer-alert').text().substr(0, matchesRemaining));
+        estimatedTimeToTourney = Math.round(matchesToNextTourney * 2.8);
+        now = new Date(Date.now());
+        tempHours = now.getHours();
+        tempMinutes = now.getMinutes() + estimatedTimeToTourney;
+        oldstring = $("#footer-alert").text();
+        if (tempMinutes > 60) {
+            estimatedHours = tempHours + Math.floor(tempMinutes / 60);
+            estimatedMinutes = tempMinutes % 60;
+            if (estimatedHours > 24) estimatedHours -= 24;
+            if (estimatedHours > 12 && estimatedHours != 24) {
+                estimatedHours -= 12;
+                printTime(estimatedHours, estimatedMinutes, ' PM');
+            }
+            else if (estimatedHours == 24) {
+                estimatedHours -= 12;
+                printTime(estimatedHours, estimatedMinutes, ' AM');
+            }
+            else {
+                printTime(estimatedHours, estimatedMinutes, ' AM');
+            }
+        }
+        else {
+            if (tempHours > 12) {
+                tempHours -= 12;
+                printTime(tempHours, tempMinutes, ' PM');
+            }
+            else if (tempHours == 0) {
+                tempHours += 12;
+                printTime(tempHours, tempMinutes, ' AM');
+            }
+            else {
+                printTime(tempHours, tempMinutes, ' AM');
+            }
+        }
+    }
+}
+
+function printTime(hours, minutes, suff) {
+    oldstring = $("#footer-alert").text();
+    newstring = " Estimated start time: " + hours + ":" + minutes + suff;
+    $("#footer-alert").text(oldstring + newstring);
+}
