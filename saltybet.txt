@@ -2,7 +2,7 @@
 // @name Custom SaltyBet Layout
 // @namespace github.com/jacob404/tampermonkey
 // @match www.saltybet.com/*
-// @version 2.2
+// @version 2.1
 // @grant none
 // ==/UserScript==
 
@@ -63,8 +63,8 @@ var timer = setInterval(updateMatchesRemaining, 500)
 
 // Add estimated time remaining until tournament
 function updateMatchesRemaining() {
-    if ($('#footer-alert').text().search("bracket") < 0 && $('#footer-alert').text().search("exhibition") < 0 && $('#footer-alert').text().search("Estimated") < 0 && $('#footer-alert').text().search("activated") < 0) {
-        matchesRemaining = $('#footer-alert').text().search(" ");
+    if (searchForText("bracket") < 0 && searchForText("exhibition") < 0 && searchForText("Estimated") < 0 && searchForText("activated") < 0 && searchForText("mode start") < 0) {
+        matchesRemaining = searchForText(" ");
         matchesToNextTourney = Number($('#footer-alert').text().substr(0, matchesRemaining));
         estimatedTimeToTourney = Math.round(matchesToNextTourney * 2.8);
         now = new Date(Date.now());
@@ -110,4 +110,8 @@ function printTime(hours, minutes, suff) {
     oldstring = $("#footer-alert").text();
     newstring = " Estimated start time: " + hours + ":" + minutes + suff;
     $("#footer-alert").text(oldstring + newstring);
+}
+
+function searchForText(input) {
+    return $('#footer-alert').text().search(input);
 }
