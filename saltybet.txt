@@ -2,7 +2,7 @@
 // @name Custom SaltyBet Layout
 // @namespace github.com/jacob404/tampermonkey
 // @match www.saltybet.com/*
-// @version 1
+// @version 2.1
 // @grant none
 // ==/UserScript==
 
@@ -103,6 +103,10 @@ function updateMatchesRemaining() {
 }
 
 function printTime(hours, minutes, suff) {
+    if (minutes < 10) {
+        minutes.toString();
+        minutes = "0" + minutes;
+    }
     oldstring = $("#footer-alert").text();
     newstring = " Estimated start time: " + hours + ":" + minutes + suff;
     $("#footer-alert").text(oldstring + newstring);
