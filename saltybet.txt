@@ -2,7 +2,7 @@
 // @name Custom SaltyBet Layout
 // @namespace github.com/jacob404/tampermonkey
 // @match www.saltybet.com/*
-// @version 2.1
+// @version 2.3
 // @grant none
 // ==/UserScript==
 
@@ -39,7 +39,6 @@ function updateBet() {
                 currentWager = Number($('#wager').val());
                 $('#wager').val(currentWager + Number(interval.substr(8)));
             }
-            
         }
         else if (name == 'rounded') {
             $('#wager').val(balance - Math.floor(balance / 1000) * 1000);
