@@ -2,7 +2,7 @@
 // @name Custom SaltyBet Layout
 // @namespace github.com/jacob404/tampermonkey
 // @match www.saltybet.com/*
-// @version 2.3
+// @version 2.4
 // @grant none
 // ==/UserScript==
 
@@ -75,6 +75,9 @@ function updateMatchesRemaining() {
             if (estimatedHours > 24) estimatedHours -= 24;
             if (estimatedHours > 12 && estimatedHours != 24) {
                 estimatedHours -= 12;
+                printTime(estimatedHours, estimatedMinutes, ' PM');
+            }
+            else if (estimatedHours == 12) {
                 printTime(estimatedHours, estimatedMinutes, ' PM');
             }
             else if (estimatedHours == 24) {
